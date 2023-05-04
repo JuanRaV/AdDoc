@@ -8,9 +8,9 @@ app.set('view engine', 'pug')
 app.set('views','./views')
 
 //Routing
-app.get('/',doctorRoutes)
+app.use('/',doctorRoutes)
 
-
+app.use(express.static('public'))
 
 const port = 3000
 app.listen(port,()=>{
