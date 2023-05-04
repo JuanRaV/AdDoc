@@ -3,10 +3,13 @@ import doctorRoutes from './routes/doctorRoutes.js'
 import db from './config/db.js'
 
 const app = express()
+//Habilitar lectura de datos de formularios
+app.use(express.urlencoded({extended:true}));
 
 //Conexion a la base de datos
 try {
-    await db.authenticate()
+    await db.authenticate();
+    db.sync();
     console.log('Conectado a la DB')
 } catch (error) {
     console.log(error)
@@ -20,7 +23,7 @@ app.use('/',doctorRoutes)
 
 app.use(express.static('public'))
 
-const port = 3000
+const port = process.env.PORT||3000
 app.listen(port,()=>{
     console.log(`Servidor corriendo en el puerto ${port}`)
 }) 
