@@ -1,0 +1,33 @@
+{
+  "name": "addoc",
+  "version": "1.0.0",
+  "description": "AdDoc",
+  "main": "index.js",
+  "scripts": {
+    "start" : "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanRaV/AdDoc.git"
+  },
+  "keywords": [
+    "MVC",
+    "Pug",
+    "Tailwind",
+    "MySQL",
+    "Sequelize",
+    "NodeJs"
+  ],
+  "author": "Juan Ramon Ramirez, Emanuel Vazquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuanRaV/AdDoc/issues"
+  },
+  "homepage": "https://github.com/JuanRaV/AdDoc#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
