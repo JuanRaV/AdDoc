@@ -10,7 +10,14 @@ const formSignup = (req,res)=>{
         pagina: "SignUp"
     })
 }
+
+const formForgotPassword = (req,res)=>{
+    res.render('auth/forgot-password',{
+        pagina: "Forget password?"
+    })
+}
 export{
     formLogin,
-    formSignup 
+    formSignup ,
+    formForgotPassword
 }

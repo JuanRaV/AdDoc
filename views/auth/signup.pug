@@ -1,4 +1,29 @@
 extends ../layout/index
 block contenido
-    div
+    .py-10 
+        h1.text-4xl.my-10.text-center.font-extrabold Ad
+            span.text-blue-600 Doc
         h2.text-center.text-2xl.font-extrabold Create your account
+
+        .mt-8.mx-auto.max-w-md
+            .bg-white.py-8.px-4.shadow
+                form(action="" class="space-y-5")
+                    div 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="name") Your Name
+                        input#name.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write your full name" type="text" name="name")
+                    div 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="email") Your email
+                        input#email.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write your email" type="email" name="email")
+                    div 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="specialty") Your specialty
+                        input#specialty.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write your specialty" type="text" name="text")
+                    div 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="password") Your password
+                        input#password.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write your password" type="password" name="password")
+                    div 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="repeatPassword") Repeat your password
+                        input#repeatPassword.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write your password again" type="password" name="password")
+                    .flex.items-center.justify-between 
+                        a.text-gray-500.text-xs(href="/login") Already have an account? LogIn 
+                        a.text-gray-500.text-xs(href="/forget-password") Forgot Password?
+                    input(type="submit" value="Create Account" class="w-full bg-blue-600 hover:bg-blue-700 py-3 text-white font-bold rounded-lg cursor-pointer ")
