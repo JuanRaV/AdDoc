@@ -1,7 +1,8 @@
 import { check, validationResult  } from "express-validator"
+import bcrypt from 'bcrypt'
 import Doctor from "../models/Doctor.js"
 import { generarId } from "../helpers/tokens.js"
-import { emailRegistro } from "../helpers/emails.js"
+import { emailRegistro,emailOlvidePassword } from "../helpers/emails.js"
 
 const formLogin = (req,res)=>{
     res.render('auth/login',{
@@ -11,9 +12,10 @@ const formLogin = (req,res)=>{
 
 const formSignup = (req,res)=>{
     res.render('auth/signup',{
-        pagina: "SignUp"
+        pagina: "SignUp",
+        csrfToken:req.csrfToken()
     })
-}
+} 
 
 const signUp=async(req,res)=>{
     //Validation
@@ -26,7 +28,7 @@ const signUp=async(req,res)=>{
     let resultado = validationResult(req)
 
     const{name,email,specialty,password} = req.body
-    //Verificar que el resultado este vacion
+    //Verificar que el resultado este vacio
     if(!resultado.isEmpty()){
         return res.render('auth/signup',{
             pagina: "SignUp",
@@ -35,7 +37,9 @@ const signUp=async(req,res)=>{
                 name,
                 email,
                 specialty
-            }
+            },
+
+            csrfToken:req.csrfToken()
         })
     }
 
@@ -49,7 +53,8 @@ const signUp=async(req,res)=>{
                 name,
                 email,
                 specialty
-            }
+            },
+            csrfToken:req.csrfToken()
         })
     }
 
@@ -99,13 +104,112 @@ const confirm=async(req,res,next)=>{
 
 const formForgotPassword = (req,res)=>{
     res.render('auth/forgot-password',{
-        pagina: "Forget password?"
+        pagina: "Forget password?",
+        csrfToken:req.csrfToken()
     }) 
+}
+
+const resetPassword=async(req,res)=>{
+    //Validation
+    await check('email').isEmail().withMessage("That's not an email").run(req)
+
+    let resultado = validationResult(req)
+
+    //Verificar que el resultado este vacion
+    if(!resultado.isEmpty()){
+        return res.render('auth/forgot-password',{
+            pagina: "Forget password?",
+            csrfToken:req.csrfToken(),
+            errors: resultado.array()
+        })
+    }
+
+    //Buscar el usuario
+    const {email} = req.body
+    const doctor = await Doctor.findOne({where:{email}})
+    if(!doctor){
+        return res.render('auth/forgot-password',{
+            pagina: "Forget password?",
+            csrfToken:req.csrfToken(),
+            errors: [{msg:"Email not registered"}]
+        }) 
+    }
+
+    //Generar token
+    doctor.token= generarId()
+    await doctor.save()
+
+    //Enviar email
+    emailOlvidePassword({
+        email:doctor.email,
+        name:doctor.name,
+        token:doctor.token
+    })
+    //Renderizar un msj
+    return res.render('templates/message',{
+        pagina:'Reset your password',
+        message:"We've sent you an email with the instructions",
+    })
+}
+
+const checkToken=async(req,res,)=>{
+    const {token} = req.params
+    const doctor = await Doctor.findOne({where:{token}})
+    console.log(doctor)
+    if(!doctor){
+        return res.render('auth/confirm-account',{
+            pagina:'Error changing your password',
+            message:"There was an error changing your password, try again",
+            error:true
+        })
+    }
+
+    //Mostrar un form para modificar el password
+    res.render('auth/reset-password',{
+        pagina:"Reset your password",
+        csrfToken: req.csrfToken()
+
+    })
+}   
+
+const newPassword=async(req,res)=>{
+    //Validar password
+    await check('password').isLength({min:6}).withMessage("Password must be at least of 6 characters").run(req)
+
+    let resultado = validationResult(req)
+    //Verificar que el resultado este vacion
+    if(!resultado.isEmpty()){
+        return res.render('auth/reset-password',{
+            pagina: "Reset your password",
+            errors: resultado.array(),
+            csrfToken:req.csrfToken()
+        })
+    }
+    //Identificar quien hace el cambio
+    const {token} = req.params
+    const{password} = req.body
+    const doctor = await Doctor.findOne({where:{token}})
+
+    //Hashear password
+    const salt = await bcrypt.genSalt(10)
+    doctor.password= await bcrypt.hash(password,salt)
+    doctor.token = null
+
+    await doctor.save()
+
+    res.render('auth/confirm-account',{
+        pagina:"Password reseted",
+        message:"Password saved correctly"
+    })
+    
 }
 export{
     formLogin,
     formSignup ,
     formForgotPassword,
     signUp,
-    confirm
+    confirm,
+    resetPassword,
+    checkToken,
+    newPassword
 }
