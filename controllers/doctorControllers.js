@@ -1,15 +1,69 @@
 import { check, validationResult  } from "express-validator"
 import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken"
 import Doctor from "../models/Doctor.js"
-import { generarId } from "../helpers/tokens.js"
+import { generarJWT, generarId } from "../helpers/tokens.js"
 import { emailRegistro,emailOlvidePassword } from "../helpers/emails.js"
 
 const formLogin = (req,res)=>{
     res.render('auth/login',{
-        pagina: "Login"
+        pagina: "Login",
+        csrfToken:req.csrfToken()
     })
 }
+const auth = async (req,res)=>{
+    //Validacion
+    await check('email').isEmail().withMessage("Email is required").run(req)
+    await check('password').notEmpty().withMessage("Password is required").run(req)
+    let resultado = validationResult(req)
+    //Verificar que el resultado este vacio
+    if(!resultado.isEmpty()){
+        return res.render('auth/login',{
+            pagina: "LogIn",
+            errors: resultado.array(),
+            csrfToken:req.csrfToken()
+        })
+    }
 
+    //Comprobar si el usuario existe
+    const{email,password} = req.body
+
+    const doctor = await Doctor.findOne({where:{email}})
+    if(!doctor){
+        return res.render('auth/login',{
+            pagina: "LogIn",
+            errors: [{msg:"The user doesn't exist"}],
+            csrfToken:req.csrfToken()
+        })
+    }
+
+    //Comprobar si el usuario esta confirmado
+    if(!doctor.verified){
+        return res.render('auth/login',{
+            pagina: "LogIn",
+            errors: [{msg:"Your account hasn't been confirmed"}],
+            csrfToken:req.csrfToken()
+        })
+    }
+
+    //Revisar el password
+    if(!doctor.verifyPassword(password)){
+        return res.render('auth/login',{
+            pagina: "LogIn",
+            errors: [{msg:"Incorrect Password"}],
+            csrfToken:req.csrfToken()
+        })
+    }
+
+    //Autenticar al usuario
+    const token = generarJWT({id: doctor.id, name: doctor.name})
+
+    //Guardando el token en un cookie
+    return res.cookie('_token',token,{
+        httpOnly:true,
+        // secure:true
+    }).redirect('/dashboard')
+}
 const formSignup = (req,res)=>{
     res.render('auth/signup',{
         pagina: "SignUp",
@@ -211,5 +265,6 @@ export{
     confirm,
     resetPassword,
     checkToken,
-    newPassword
+    newPassword,
+    auth
 }

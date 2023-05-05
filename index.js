@@ -2,6 +2,7 @@ import express from 'express'
 import csrf from 'csurf'
 import cookieParser from 'cookie-parser'
 import doctorRoutes from './routes/doctorRoutes.js'
+import dashboardRoutes from './routes/dashboardRoutes.js'
 import db from './config/db.js'
 
 const app = express()
@@ -28,7 +29,7 @@ app.set('views','./views')
 
 //Routing
 app.use('/',doctorRoutes)
-
+app.use('/dashboard',dashboardRoutes)
 app.use(express.static('public'))
 
 const port = process.env.PORT||3000

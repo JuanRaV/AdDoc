@@ -1,9 +1,10 @@
 import express from 'express'
-import { formLogin,formSignup,formForgotPassword,confirm,signUp,resetPassword,checkToken,newPassword } from '../controllers/doctorControllers.js';
+import { formLogin,formSignup,formForgotPassword,confirm,signUp,resetPassword,checkToken,newPassword,auth } from '../controllers/doctorControllers.js';
 
 const router = express.Router();
 
 router.get('/login',formLogin)
+router.post('/login',auth)
 
 router.get('/signup',formSignup)
 router.post('/signup',signUp)

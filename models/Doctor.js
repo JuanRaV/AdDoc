@@ -32,7 +32,11 @@ const Doctor = db.define('doctors',{
             doctor.password= await bcrypt.hash(doctor.password,salt)
         },
     }
+})
+
+//Metodos personalizados
+Doctor.prototype.verifyPassword = function(password){
+    return bcrypt.compareSync(password,this.password)
 }
-)
 
 export default Doctor;
