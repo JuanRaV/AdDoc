@@ -5,7 +5,7 @@ import doctorRoutes from './routes/doctorRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import db from './config/db.js';
 import "./models/associations.js";
-await db.sync({ force: true });
+await db.sync();
 
 const app = express();
 
