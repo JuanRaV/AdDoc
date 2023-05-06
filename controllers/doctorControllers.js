@@ -81,7 +81,7 @@ const signUp=async(req,res)=>{
 
     let resultado = validationResult(req)
 
-    const{name,email,specialty,password} = req.body
+    const{name,email,specialty} = req.body
     //Verificar que el resultado este vacio
     if(!resultado.isEmpty()){
         return res.render('auth/signup',{
