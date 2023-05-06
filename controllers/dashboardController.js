@@ -4,11 +4,13 @@ import Symptom from "../models/Symptom.js";
 
 const admin =async  (req,res)=>{
     const symptoms = await Symptom.findAll();
+    const patients = await Patient.findAll();
     res.render('dashboard/admin',{
         pagina: "Dashboard",
         barra:true,
         csrfToken:req.csrfToken(),
-        symptoms
+        symptoms,
+        patients
     })
 }
 const registerPatient=async(req,res)=>{
@@ -18,17 +20,20 @@ const registerPatient=async(req,res)=>{
     await check('address').notEmpty().withMessage("Address is required").run(req)
     await check('phoneNumber').notEmpty().isNumeric().withMessage("Phone is required").run(req)
 
+    const patients = await Patient.findAll();
     let resultado = validationResult(req);
     const {email} = req.body;
     const symptoms = await Symptom.findAll();
     if(!resultado.isEmpty()){
         return res.render('dashboard/admin',{
             pagina: "Dashboard",
+            barra:true,
             errors: resultado.array(),
             csrfToken:req.csrfToken(),
             patient:{
                 ...req.body
-            },symptoms
+            },symptoms,
+            patients
         })
     }
     
@@ -37,10 +42,13 @@ const registerPatient=async(req,res)=>{
         return res.render('dashboard/admin',{
             pagina:"Dashboard",
             errors:[{msg:'Patient already registered'}],
+            barra:true,
             patient:{
                 ...req.body
             },
-            csrfToken:req.csrfToken(),symptoms
+            csrfToken:req.csrfToken(),
+            symptoms,
+            patients
         })
     }
 
@@ -53,8 +61,11 @@ const registerPatient=async(req,res)=>{
         barra:true,
         success:{
             msg:"Patient created"
-        },symptoms,
-        csrfToken:req.csrfToken()
+        },
+        barra:true,
+        symptoms,
+        csrfToken:req.csrfToken(),
+        patients
     })
     
 }
