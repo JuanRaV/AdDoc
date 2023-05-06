@@ -1,38 +1,42 @@
-import express from 'express'
-import csrf from 'csurf'
-import cookieParser from 'cookie-parser'
-import doctorRoutes from './routes/doctorRoutes.js'
-import dashboardRoutes from './routes/dashboardRoutes.js'
-import db from './config/db.js'
+import express from 'express';
+import csrf from 'csurf';
+import cookieParser from 'cookie-parser';
+import doctorRoutes from './routes/doctorRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import db from './config/db.js';
+import "./models/associations.js";
+await db.sync({ force: true });
 
-const app = express()
-//Habilitar lectura de datos de formularios
+const app = express();
+
+// Enable reading data from forms
 app.use(express.urlencoded({extended:true}));
 
-//Habilitar cookie pparser
-app.use(cookieParser())
+// Enable cookie parser
+app.use(cookieParser());
 
-//Habilitar csrf
-app.use(csrf({cookie:true}))
+// Enable csrf
+app.use(csrf({cookie:true}));
 
-//Conexion a la base de datos
+// Connect to the database
 try {
     await db.authenticate();
-    db.sync();
-    console.log('Conectado a la DB')
+    
+    console.log('Connected to the DB');
 } catch (error) {
-    console.log(error)
+    console.log(error);
 }
-//Habilitando pug
-app.set('view engine', 'pug')
-app.set('views','./views')
 
-//Routing
-app.use('/',doctorRoutes)
-app.use('/dashboard',dashboardRoutes)
-app.use(express.static('public'))
+// Enable Pug
+app.set('view engine', 'pug');
+app.set('views','./views');
 
-const port = process.env.PORT||3000
+// Routing
+app.use('/',doctorRoutes);
+app.use('/dashboard',dashboardRoutes);
+app.use(express.static('public'));
+
+const port = process.env.PORT||3000;
 app.listen(port,()=>{
-    console.log(`Servidor corriendo en el puerto ${port}`)
-}) 
+    console.log(`Server running on port ${port}`);
+});
