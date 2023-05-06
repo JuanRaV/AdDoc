@@ -17,7 +17,7 @@ const Patient = db.define("patients", {
     allowNull: false,
   },
   gender: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING, 
     allowNull: false,
   },
   address: {
