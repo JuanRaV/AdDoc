@@ -5,6 +5,7 @@ import Symptom from "../models/Symptom.js";
 const admin =async  (req,res)=>{
     const symptoms = await Symptom.findAll();
     const patients = await Patient.findAll();
+
     res.render('dashboard/admin',{
         pagina: "Dashboard",
         barra:true,

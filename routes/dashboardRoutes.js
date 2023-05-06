@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/',authenticate,admin)
 
+router.get('/register',authenticate,admin)
 router.post('/register',authenticate,registerPatient)
 
 export default router;

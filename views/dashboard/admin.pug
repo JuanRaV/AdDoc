@@ -29,9 +29,9 @@ block contenido
                         div 
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="gender") Gender:
                             select#gender.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient gender:" name="gender")
-                                option(value="male") Male 
-                                option(value="female") Female 
-                                option(value="other") Other 
+                                option(value="Male") Male 
+                                option(value="Female") Female 
+                                option(value="Other") Other 
                         div 
                                 label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="address") Address:
                                 input#address.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient address:" type="text" name="address" value= patient?patient.address:'')
@@ -41,12 +41,12 @@ block contenido
                         div 
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="religion") Religion:
                             select#religion.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient religion:" name="religion")
-                                option(value="christianity") Christianity 
-                                option(value="judaism") Judaism 
-                                option(value="hinduism") Hinduism 
-                                option(value="buddhism") Buddhism 
-                                option(value="islam") Islam 
-                                option(value="other") Other 
+                                option(value="Christianity") Christianity 
+                                option(value="Judaism") Judaism 
+                                option(value="Hinduism") Hinduism 
+                                option(value="Buddhism") Buddhism 
+                                option(value="Islam") Islam 
+                                option(value="Other") Other 
                         div
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="symptoms") Symptoms:
                             select#symptoms.w-full.px-3.py-2.border.border-blue-700.rounded-md(placeholder="Choose the patient symptoms:" name="symptoms")
@@ -54,17 +54,23 @@ block contenido
                                     option(value=symptom.id)= symptom.name
 
                         input(type="submit" value="Save Patient" class="w-full bg-blue-600 hover:bg-blue-700 py-3 text-white font-bold rounded-lg cursor-pointer ")
-            div(class="md:w-1/2 sm:w-full")
+            div(class="md:w-1/2 md:mt-0 sm:w-full sm:mt-5")
+                if patients.length ===0
+                    h2(class="font-extrabold text-2xl text-center mb-3") Start adding   
+                        span(class="text-blue-600   ") Patients
                 each patient in patients
-                        div(class="flex flex-col items-start bg-white border border-gray-300 rounded shadow-md p-5 mb-5 max-w-xs cursor-pointer py-3 mb-4")
-                            h3(class="text-2xl font-extrabold my-2 ")= patient.name
-                            ul 
-                                li= patient.age
-                                li= patient.gender
-                                li= patient.address
-                                li= patient.phoneNumber
-                                li= patient.religion
-
-
-
-                        
+                    div(class="flex flex-col items-start bg-white border border-gray-300 rounded shadow-md mx-5 px-5 mb-5 max-w-xs py-3")
+                        h3(class="text-2xl font-extrabold my-2")= patient.name
+                        p(class="font-bold text-lg") Age: 
+                            span(class="font-normal") #{patient.age}
+                        p(class="font-bold text-lg") Gender: 
+                            span(class="font-normal") #{patient.gender}
+                        p(class="font-bold text-lg") Address: 
+                            span(class="font-normal") #{patient.address}
+                        p(class="font-bold text-lg") Phone Number: 
+                            span(class="font-normal") #{patient.phoneNumber}
+                        p(class="font-bold text-lg") Religion: 
+                            span(class="font-normal") #{patient.religion}
+                        div(class="inline-block mt-2")
+                            button(class="bg-blue-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold ") Edit
+                            button(class="bg-red-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold mx-10") Delete
