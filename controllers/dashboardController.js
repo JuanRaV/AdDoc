@@ -1,11 +1,14 @@
 import { check, validationResult  } from "express-validator"
 import Patient from "../models/Patient.js"
+import Symptom from "../models/Symptom.js";
 
-const admin = (req,res)=>{
+const admin =async  (req,res)=>{
+    const symptoms = await Symptom.findAll();
     res.render('dashboard/admin',{
         pagina: "Dashboard",
         barra:true,
-        csrfToken:req.csrfToken()
+        csrfToken:req.csrfToken(),
+        symptoms
     })
 }
 const registerPatient=async(req,res)=>{
@@ -16,7 +19,8 @@ const registerPatient=async(req,res)=>{
     await check('phoneNumber').notEmpty().isNumeric().withMessage("Phone is required").run(req)
 
     let resultado = validationResult(req);
-    const {email} = req.body
+    const {email} = req.body;
+    const symptoms = await Symptom.findAll();
     if(!resultado.isEmpty()){
         return res.render('dashboard/admin',{
             pagina: "Dashboard",
@@ -24,7 +28,7 @@ const registerPatient=async(req,res)=>{
             csrfToken:req.csrfToken(),
             patient:{
                 ...req.body
-            }
+            },symptoms
         })
     }
     
@@ -36,7 +40,7 @@ const registerPatient=async(req,res)=>{
             patient:{
                 ...req.body
             },
-            csrfToken:req.csrfToken()
+            csrfToken:req.csrfToken(),symptoms
         })
     }
 
@@ -49,7 +53,8 @@ const registerPatient=async(req,res)=>{
         barra:true,
         success:{
             msg:"Patient created"
-        }
+        },symptoms,
+        csrfToken:req.csrfToken()
     })
     
 }
