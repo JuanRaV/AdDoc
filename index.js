@@ -3,7 +3,7 @@ import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
 import doctorRoutes from './routes/doctorRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import db from './config/db.js';
+import db from './config/db.cjs';
 import "./models/associations.js";
 await db.sync();
 

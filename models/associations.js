@@ -1,4 +1,4 @@
-import db from "../config/db.js";
+import db from "../config/db.cjs";
 import { DataTypes } from "sequelize";
 import Patient from "./Patient.js";
 import Symptom from "./Symptom.js";

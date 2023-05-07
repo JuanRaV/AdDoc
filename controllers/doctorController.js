@@ -70,7 +70,21 @@ const registerPatient=async(req,res)=>{
     })
     
 }
+
+const softDeletePatient = async(req,res) =>{
+    const patientId = req.params.id;
+
+  // Soft delete the patient by setting the deleted field to true
+  await Patient.update(
+    { deleted: true },
+    { where: { id: patientId, deleted: false } }
+  );
+
+  // Redirect to the desired page after soft deletion
+  res.redirect('/some-page');
+}
 export{
     admin,
-    registerPatient
+    registerPatient,
+    softDeletePatient
 }
