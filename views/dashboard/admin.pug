@@ -14,7 +14,7 @@ block contenido
                         each error in errors
                             p(class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= error.msg
                 .bg-white.py-8.px-4.shadow
-                    form( method="POST" class="space-y-5" action="/dashboard/register")
+                    form( method="POST" class="space-y-5" action="/dashboard/register-pacient")
                         legend(class="mb-4 font-extrabold text-lg text-center text-blue-600") Patient Data
                         input(type="hidden" name="_csrf" value= csrfToken)
                         div 
