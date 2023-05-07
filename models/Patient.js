@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import db from '../config/db.js'
+import db from '../config/db.cjs'
 import Doctor from "./Doctor.js";
 
 
@@ -31,6 +31,11 @@ const Patient = db.define("patients", {
   religion: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  deleted: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   },
   doctorId: {
     type: DataTypes.INTEGER,

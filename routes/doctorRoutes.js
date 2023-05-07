@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/',authenticate,admin)
 
-router.post('/register-pacient',authenticate,registerPatient)
+router.post('/register-patient',authenticate,registerPatient)
+router.delete('/patient/:id')
 
 export default router;

@@ -41,9 +41,11 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
+    "babel-register": "^6.26.0",
     "nodemon": "^2.0.22",
     "postcss": "^8.4.23",
     "postcss-cli": "^10.1.0",
+    "sequelize-cli": "^6.6.0",
     "tailwindcss": "^3.3.2"
   }
 }
