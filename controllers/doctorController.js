@@ -4,8 +4,8 @@ import Symptom from "../models/Symptom.js";
 
 const admin =async  (req,res)=>{
     const symptoms = await Symptom.findAll();
-    const patients = await Patient.findAll();
-
+    const patients = await Patient.findAll({ where: { deleted: false } });
+    
     res.render('dashboard/admin',{
         pagina: "Dashboard",
         barra:true,
@@ -21,7 +21,7 @@ const registerPatient=async(req,res)=>{
     await check('address').notEmpty().withMessage("Address is required").run(req)
     await check('phoneNumber').notEmpty().isNumeric().withMessage("Phone is required").run(req)
 
-    const patients = await Patient.findAll();
+    const patients = await Patient.findAll({ where: { deleted: false } });
     let resultado = validationResult(req);
     const {email} = req.body;
     const symptoms = await Symptom.findAll();
@@ -73,7 +73,7 @@ const registerPatient=async(req,res)=>{
 
 const softDeletePatient = async(req,res) =>{
     const patientId = req.params.id;
-
+    console.log("deleted patient")
   // Soft delete the patient by setting the deleted field to true
   await Patient.update(
     { deleted: true },

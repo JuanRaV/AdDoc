@@ -74,4 +74,31 @@ block contenido
                         div(class="inline-block mt-2")
                             
                             button(class="bg-blue-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold ") Edit
-                            button(class="bg-red-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold mx-10" data-patient-id=student.id) Delete
+                            button(class="bg-red-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold mx-10" data-patient-id=patient.id data-csrfToken=csrfToken ) Delete
+                            
+    script.
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButtons = document.querySelectorAll('button[data-patient-id]');
+            
+            
+            deleteButtons.forEach((button) => {
+            button.addEventListener('click', async () => {
+                const patientId = button.getAttribute('data-patient-id');
+                const  csrfToken = button .getAttribute('data-csrfToken');
+                console.log(csrfToken)
+                try {
+                await axios.delete(`/dashboard/patient/${patientId}`, {
+                    headers: {
+                    'X-CSRF-Token': csrfToken
+                    }
+                });
+                 
+                } catch (error) {
+                console.log('Error deleting patient:', error);
+                }
+               window.location.reload()
+            });
+            });
+        });
+

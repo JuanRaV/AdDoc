@@ -209,7 +209,7 @@ const resetPassword=async(req,res)=>{
 const checkToken=async(req,res,)=>{
     const {token} = req.params
     const doctor = await Doctor.findOne({where:{token}})
-    console.log(doctor)
+
     if(!doctor){
         return res.render('auth/confirm-account',{
             pagina:'Error changing your password',

@@ -1,7 +1,11 @@
 import { DataTypes } from "sequelize";
 import bcrypt from 'bcrypt'
-import db from '../config/db.cjs'
-
+const importDb = async () => {
+    const db = await import('../config/db.cjs');
+    return db.default;
+  };
+  
+const db = await importDb();
 const Doctor = db.define('doctors',{
     name: {
         type: DataTypes.STRING,
