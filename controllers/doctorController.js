@@ -11,10 +11,10 @@ const admin =async  (req,res)=>{
         barra:true,
         csrfToken:req.csrfToken(),
         symptoms,
-        patients
+        patients,        
     })
 }
-const registerPatient=async(req,res)=>{
+const registerPatient=async(req,res,next)=>{
     await check('name').notEmpty().withMessage("Name is required").run(req)
     await check('email').isEmail().withMessage("Email that's not an email").run(req)
     await check('age').notEmpty().isNumeric().withMessage("Age is required").run(req)
@@ -38,7 +38,7 @@ const registerPatient=async(req,res)=>{
         })
     }
     
-    const existPatient = await Patient.findOne({where:{email}})
+    const existPatient = await Patient.findOne({where:{email,deleted: false}})
     if(existPatient){
         return res.render('dashboard/admin',{
             pagina:"Dashboard",
@@ -57,7 +57,8 @@ const registerPatient=async(req,res)=>{
         ...req.body,
         doctorId: req.userId
     })
-    return res.render('dashboard/admin',{
+
+     res.render('dashboard/admin',{
         pagina:"Dashboard",
         barra:true,
         success:{
@@ -66,25 +67,66 @@ const registerPatient=async(req,res)=>{
         barra:true,
         symptoms,
         csrfToken:req.csrfToken(),
-        patients
+        patients,
     })
     
 }
+const redirectDashboard=(req,res)=>{
 
+    res.redirect('/dashboard')
+
+}
 const softDeletePatient = async(req,res) =>{
     const patientId = req.params.id;
     console.log("deleted patient")
   // Soft delete the patient by setting the deleted field to true
-  await Patient.update(
-    { deleted: true },
-    { where: { id: patientId, deleted: false } }
-  );
+    await Patient.update(
+        { deleted: true },
+        { where: { id: patientId, deleted: false } }
+    );
 
   // Redirect to the desired page after soft deletion
-  res.redirect('/some-page');
+     res.redirect('/dashboard');
+
+}
+const getEditPatientPage=async(req,res)=>{
+    const patientId = req.params.id;
+    const symptoms = await Symptom.findAll();
+    console.log(patientId)
+
+    const patient = await Patient.findOne({where:{id:patientId}})
+    res.render('dashboard/edit-patient',{
+        patient,
+        barra:true,
+        pagina:"Edit Patient",
+        csrfToken:req.csrfToken(),
+        symptoms,
+    })
+}
+const editPatient=async(req,res)=>{
+    const {id}  = req.params
+    const {age,phoneNumber,...restBody} = req.body
+    try {
+        await Patient.update(
+            { age,
+            phoneNumber,
+            restBody },
+            { where: { id } }
+        );
+        
+        res.redirect('/dashboard')
+    } catch (error) {
+        console.log(error)
+    }
+
+    
+    
 }
 export{
     admin,
     registerPatient,
-    softDeletePatient
+    softDeletePatient,
+    editPatient,
+    redirectDashboard,
+    getEditPatientPage
 }

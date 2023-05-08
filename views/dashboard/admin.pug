@@ -5,14 +5,16 @@ block contenido
         h1.text-4xl.my-5.text-center.font-extrabold Ad
             span.text-blue-600 Doc
         h2.text-center.text-2xl.font-extrabold.mb-9= pagina
-        if success 
-            p(class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg py-3")= success.msg
+        div#success
+            if success
+                div(class="max-w-md mx-auto my-10")
+                    p(class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= success.msg 
         div(class="flex flex-wrap mt-10")
-            div(class="md:w-1/2 sm:w-full")
+            div(class="md:w-1/2 sm:w-full ")
                 if errors
                     div(class="max-w-md mx-auto my-10")
                         each error in errors
-                            p(class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= error.msg
+                            p(class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= error.msg   
                 .bg-white.py-8.px-4.shadow
                     form( method="POST" class="space-y-5" action="/dashboard/register-patient")
                         legend(class="mb-4 font-extrabold text-lg text-center text-blue-600") Patient Data
@@ -53,7 +55,7 @@ block contenido
                                 each symptom in symptoms
                                     option(value=symptom.id)= symptom.name
 
-                        input(type="submit" value="Save Patient" class="w-full bg-blue-600 hover:bg-blue-700 py-3 text-white font-bold rounded-lg cursor-pointer ")
+                        input#submit(type="submit" value="Save Patient" class="w-full bg-blue-600 hover:bg-blue-700 py-3 text-white font-bold rounded-lg cursor-pointer ")
             div(class="md:w-1/2 md:mt-0 sm:w-full sm:mt-5")
                 if patients.length ===0
                     h2(class="font-extrabold text-2xl text-center mb-3") Start adding   
@@ -73,15 +75,44 @@ block contenido
                             span(class="font-normal") #{patient.religion}
                         div(class="inline-block mt-2")
                             
-                            button(class="bg-blue-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold ") Edit
-                            button(class="bg-red-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold mx-10" data-patient-id=patient.id data-csrfToken=csrfToken ) Delete
+                            a(href=`/dashboard/edit-patient/${patient.id}`) 
+                                button(class="edit bg-blue-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold " data-patient-id=patient.id data-csrfToken=csrfToken) Edit
+                            button(class="delete bg-red-500 py-1 px-4 mt-2 rounded-xl text-center text-white font-bold mx-10" data-patient-id=patient.id data-csrfToken=csrfToken ) Delete
                             
     script.
 
+      
         document.addEventListener('DOMContentLoaded', () => {
-            const deleteButtons = document.querySelectorAll('button[data-patient-id]');
-            
-            
+            const deleteButtons = document.querySelectorAll('.delete');
+            const editButtons = document.querySelectorAll('.edit');
+            //- const successSection = document.getElementById('success');
+            //- const submitButton = document.getElementById('submit');
+
+            //- editButtons.forEach((button)=>{
+            //-     button.addEventListener('click',async()=>{
+            //-         const patientId = button.getAttribute('data-patient-id');
+            //-         const  csrfToken = button .getAttribute('data-csrfToken');
+            //-         console.log(patientId)
+            //-         console.log(csrfToken)
+            //-         try {
+            //-         await axios.put(`/dashboard/edit-patient/${patientId}`, {
+            //-             headers: {
+            //-             'X-CSRF-Token': csrfToken
+            //-             }
+            //-         });
+                    
+            //-         } catch (error) {
+            //-             console.log('Error updating patient:', error);
+            //-         }
+            //-     //- window.location.reload()
+            //-     })
+            //- })
+            //- // Crea un nuevo elemento de párrafo
+            //- const newParagraph = document.createElement('p');
+            //- newParagraph.textContent = 'Tu formulario se ha enviado correctamente.';
+            //- newParagraph.classList.add('bg-green-600',' text-white',' uppercase',' text-xs ','text-center', 'p-2' ,'mb-1',' font-bold' ,'rounded-lg')
+            //- // Agrega el nuevo elemento de párrafo al elemento successSection
+            //- successSection.appendChild(newParagraph);
             deleteButtons.forEach((button) => {
             button.addEventListener('click', async () => {
                 const patientId = button.getAttribute('data-patient-id');

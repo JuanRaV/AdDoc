@@ -1,0 +1,77 @@
+extends ../layout/index
+block contenido
+
+    .py-5 
+        h1.text-4xl.my-5.text-center.font-extrabold Ad
+            span.text-blue-600 Doc
+        h2.text-center.text-2xl.font-extrabold.mb-9= pagina
+        div#success
+            if success
+                div(class="max-w-md mx-auto my-10")
+                    p(class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= success.msg 
+        div(class="flex flex-wrap mt-10")
+            div(class="md:w-1/2 sm:w-full m-auto ")
+                if errors
+                    div(class="max-w-md mx-auto my-10")
+                        each error in errors
+                            p(class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= error.msg   
+                .bg-white.py-8.px-4.shadow
+                    form#edit-patient-form( method="POST"  class="space-y-5" action="/dashboard/register-patient")
+                        input#patientId(type="hidden" name="patientId" value= patient.id)
+                        legend(class="mb-4 font-extrabold text-lg text-center text-blue-600") Patient Data
+                        input(type="hidden" name="_csrf" value= csrfToken)
+                        div 
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="name") Name:
+                            input#name.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient name:" type="text" name="name" value= patient?patient.name:'')
+                        div 
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="email") Email:
+                            input#email.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient email:" type="email" name="email" value= patient?patient.email:'')
+                        div 
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="age") Age:
+                            input#age.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient age:" type="number" name="age" value= patient?patient.age:'')
+                        div 
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="gender") Gender:
+                            select#gender.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient gender:" name="gender")
+                                option(value="Male") Male 
+                                option(value="Female") Female 
+                                option(value="Other") Other 
+                        div 
+                                label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="address") Address:
+                                input#address.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient address:" type="text" name="address" value= patient?patient.address:'')
+                        div 
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="phoneNumber") Phone Number:
+                            input#phoneNumber.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient phone Number:" type="number" name="phoneNumber" value= patient?patient.phoneNumber:'')
+                        div 
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="religion") Religion:
+                            select#religion.w-full.px-3.py-2.border.border-blue-700.rounded-md.placeholder-gay-300(placeholder="Write the patient religion:" name="religion")
+                                option(value="Christianity") Christianity 
+                                option(value="Judaism") Judaism 
+                                option(value="Hinduism") Hinduism 
+                                option(value="Buddhism") Buddhism 
+                                option(value="Islam") Islam 
+                                option(value="Other") Other 
+                        div
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="symptoms") Symptoms:
+                            select#symptoms.w-full.px-3.py-2.border.border-blue-700.rounded-md(placeholder="Choose the patient symptoms:" name="symptoms")
+                                each symptom in symptoms
+                                    option(value=symptom.id)= symptom.name
+
+                        input#submit(type="submit" value="Edit Patient" class="w-full bg-blue-600 hover:bg-blue-700 py-3 text-white font-bold rounded-lg cursor-pointer ")
+        script.
+            const editPatientForm = document.getElementAll('#edit-patient-form')
+
+            editPatientForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(editPatientForm)
+                const patientId = document.getElementAll('#patientId').value()
+                try{
+                    const response = await axios.put(`dashboard/edit-patient/${patientId}`,formData,{
+                        headers: {
+                            'X-CSRF-Token': csrfToken
+                        }
+                    })
+
+                }catch(error){
+                    console.log('Erro editing', error)
+                }    
+            }
