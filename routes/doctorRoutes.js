@@ -1,21 +1,11 @@
 import express from 'express'
-import { formLogin,formSignup,formForgotPassword,confirm,signUp,resetPassword,checkToken,newPassword,auth } from '../controllers/doctorControllers.js';
+import { admin,registerPatient } from '../controllers/doctorController.js';
+import authenticate from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/login',formLogin)
-router.post('/login',auth)
+router.get('/',authenticate,admin)
 
-router.get('/signup',formSignup)
-router.post('/signup',signUp)
+router.post('/register-pacient',authenticate,registerPatient)
 
-router.get('/confirm/:token',confirm)
-
-router.get('/forget-password',formForgotPassword)
-router.post('/forget-password',resetPassword)
-
-//Almacena el nuevo password
-router.get('/forget-password/:token',checkToken)
-router.post('/forget-password/:token',newPassword)
-
-export default router 
+export default router;

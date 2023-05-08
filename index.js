@@ -2,7 +2,7 @@ import express from 'express';
 import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
 import doctorRoutes from './routes/doctorRoutes.js';
-import dashboardRoutes from './routes/dashboardRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import db from './config/db.js';
 import "./models/associations.js";
 await db.sync();
@@ -32,8 +32,8 @@ app.set('view engine', 'pug');
 app.set('views','./views');
 
 // Routing
-app.use('/',doctorRoutes);
-app.use('/dashboard',dashboardRoutes);
+app.use('/',authRoutes);
+app.use('/dashboard',doctorRoutes);
 app.use(express.static('public'));
 
 const port = process.env.PORT||3000;
