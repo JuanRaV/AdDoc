@@ -57,7 +57,7 @@ const registerPatient=async(req,res)=>{
         ...req.body,
         doctorId: req.userId
     })
-    return res.render('dashboard/admin',{
+    res.render('dashboard/admin',{
         pagina:"Dashboard",
         barra:true,
         success:{
@@ -68,8 +68,24 @@ const registerPatient=async(req,res)=>{
         csrfToken:req.csrfToken(),
         patients
     })
+    // setTimeout(()=>{
+    //     window.location.reload()
+    // },5000)
     
 }
+
+const softDeletePatient = async (req,res,next) =>{
+    const patientId = req.params.id;
+
+    await Patient.update(
+        {deleted:true},
+        {where:{
+            id:patientId,
+            deleted:false
+        }}
+    )
+}
+
 export{
     admin,
     registerPatient

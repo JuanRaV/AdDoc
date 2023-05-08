@@ -39,6 +39,10 @@ const Patient = db.define("patients", {
       model: Doctor,
       key: "id",
     },
+    deleted:{
+      type: DataTypes.BOOLEAN,
+      default:false
+    },
   }
   
 });
