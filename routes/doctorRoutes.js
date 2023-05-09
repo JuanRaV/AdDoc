@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/',authenticate,admin)
 router.get('/edit-patient/:id',authenticate,getEditPatientPage)
-router.put('/edit-patient/:id',authenticate,editPatient)
+router.post('/edit-patient/:id',authenticate,editPatient)
 router.post('/register-patient',authenticate,registerPatient,redirectDashboard)
 router.delete('/patient/:id',softDeletePatient)
 

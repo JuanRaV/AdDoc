@@ -90,11 +90,19 @@ const softDeletePatient = async(req,res) =>{
 
 }
 const getEditPatientPage=async(req,res)=>{
-    const patientId = req.params.id;
+    const {id} = req.params;
     const symptoms = await Symptom.findAll();
-    console.log(patientId)
+    const patient = await Patient.findByPk(id)
+    //Validar que existe el usuario
+    if(!patient){
+        return res.redirect('/dashboard')
+    }
 
-    const patient = await Patient.findOne({where:{id:patientId}})
+    //Revisar quien visita la url es quien creo al paciente
+    // if(patient.id.toString()!==req.userId.toString()){
+    //     return res.redirect('/dashboard')
+    // }
+
     res.render('dashboard/edit-patient',{
         patient,
         barra:true,
@@ -104,23 +112,48 @@ const getEditPatientPage=async(req,res)=>{
     })
 }
 const editPatient=async(req,res)=>{
+    await check('name').notEmpty().withMessage("Name is required").run(req)
+    await check('email').isEmail().withMessage("Email that's not an email").run(req)
+    await check('age').notEmpty().isNumeric().withMessage("Age is required").run(req)
+    await check('address').notEmpty().withMessage("Address is required").run(req)
+    await check('phoneNumber').notEmpty().isNumeric().withMessage("Phone is required").run(req)
+
+
+    let resultado = validationResult(req);
+    const symptoms = await Symptom.findAll();
+    if(!resultado.isEmpty()){
+        return res.render('dashboard/edit-patient',{
+            patient: req.body,
+            barra:true,
+            pagina:"Edit Patient",
+            errors: resultado.array(),
+            csrfToken:req.csrfToken(),
+            symptoms,
+        })
+    }
     const {id}  = req.params
-    const {age,phoneNumber,...restBody} = req.body
+    const patient = await Patient.findByPk(id)
+    //Validar que existe el usuario
+    if(!patient){
+        return res.redirect('/dashboard')
+    }
+
+    const { age, phoneNumber, name, email, gender,address,religion } = req.body;
     try {
-        await Patient.update(
-            { age,
+        patient.set({
+            age,
             phoneNumber,
-            restBody },
-            { where: { id } }
-        );
-        
+            name,
+            email,
+            gender,
+            address,
+            religion
+        })
+        await patient.save()
         res.redirect('/dashboard')
     } catch (error) {
         console.log(error)
-    }
-
-    
-    
+    }   
 }
 export{
     admin,
