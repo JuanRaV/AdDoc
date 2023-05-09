@@ -2,6 +2,7 @@ import { check, validationResult  } from "express-validator"
 import Patient from "../models/Patient.js"
 import Symptom from "../models/Symptom.js";
 
+
 const admin =async  (req,res)=>{
     const symptoms = await Symptom.findAll();
     const patients = await Patient.findAll({ where: { deleted: false } });
@@ -12,6 +13,12 @@ const admin =async  (req,res)=>{
         csrfToken:req.csrfToken(),
         symptoms,
         patients,        
+    })
+}
+const formSignup = (req,res)=>{
+    res.render('auth/signup',{
+        pagina: "SignUp",
+        csrfToken:req.csrfToken()
     })
 }
 const registerPatient=async(req,res,next)=>{
@@ -51,6 +58,7 @@ const registerPatient=async(req,res,next)=>{
             symptoms,
             patients
         })
+
     }
 
     await Patient.create({
@@ -58,17 +66,19 @@ const registerPatient=async(req,res,next)=>{
         doctorId: req.userId
     })
 
-     res.render('dashboard/admin',{
-        pagina:"Dashboard",
-        barra:true,
-        success:{
-            msg:"Patient created"
-        },
-        barra:true,
-        symptoms,
-        csrfToken:req.csrfToken(),
-        patients,
-    })
+    //  res.render('dashboard/admin',{
+    //     pagina:"Dashboard",
+    //     barra:true,
+    //     success:{
+    //         msg:"Patient created"
+    //     },
+    //     barra:true,
+    //     symptoms,
+    //     csrfToken:req.csrfToken(),
+    //     patients,
+    // })
+    req.flash('success', 'Patient created successfully!');
+    req.redirect('/dashboard')
     
 }
 const redirectDashboard=(req,res)=>{
@@ -155,6 +165,7 @@ const editPatient=async(req,res)=>{
         console.log(error)
     }   
 }
+
 export{
     admin,
     registerPatient,

@@ -39,6 +39,10 @@
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.2.4",
     "nodemailer": "^6.9.1",
+    "passport": "^0.6.0",
+    "passport-auth-token": "^1.0.1",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "pug": "^3.0.2",
     "sequelize": "^6.31.1"
   },

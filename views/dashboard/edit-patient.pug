@@ -57,23 +57,4 @@ block contenido
                                     option(value=symptom.id)= symptom.name
                        
                         input#submit(type="submit" value="Edit Patient" class="w-full bg-blue-600 hover:bg-blue-700 py-3 text-white font-bold rounded-lg cursor-pointer ")
-    //- script.
-    //-     const editPatientForm = document.getElementById('edit-patient-form')
-
-    //-     editPatientForm.addEventListener('submit', async (e) => {
-    //-         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    //-         const patientId = document.getElementById('patientId').value();
-    //-         e.preventDefault();
-    //-         console.log('Hola')
-    //-         try{
-    //-         const formData = new FormData(editPatientForm);
-    //-         const response = await axios.put(`/dashboard/edit-patient/${patientId}`, formData, {
-    //-             headers: {
-    //-             'X-CSRF-Token': csrfToken
-    //-             }
-    //-         });
-    //-         } catch(error) {
-    //-         console.log('Error editing', error);
-    //-         }    
-    //-     });
 

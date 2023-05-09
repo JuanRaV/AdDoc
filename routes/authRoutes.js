@@ -1,7 +1,8 @@
 import express from 'express'
-import { formLogin,formSignup,formForgotPassword,confirm,signUp,resetPassword,checkToken,newPassword,auth } from '../controllers/authControllers.js';
+import { formLogin,formSignup,formForgotPassword,confirm,signUp,resetPassword,checkToken,newPassword,auth,logOut } from '../controllers/authControllers.js';
 
 const router = express.Router();
+router.get('/logout', logOut);
 
 router.get('/login',formLogin)
 router.post('/login',auth)

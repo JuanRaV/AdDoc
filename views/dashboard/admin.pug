@@ -6,9 +6,12 @@ block contenido
             span.text-blue-600 Doc
         h2.text-center.text-2xl.font-extrabold.mb-9= pagina
         div#success
-            if success
-                div(class="max-w-md mx-auto my-10")
-                    p(class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= success.msg 
+            if success.length > 0
+                div.bg-green-500.text-white.font-bold.py-2.px-4.rounded(id="alert")
+                    = success
+            //- if success
+            //-     div(class="max-w-md mx-auto my-10")
+            //-         p(class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-lg")= success.msg 
         div(class="flex flex-wrap mt-10")
             div(class="md:w-1/2 sm:w-full ")
                 if errors
