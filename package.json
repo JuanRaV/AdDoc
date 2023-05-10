@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "nodemon index.js",
-    "css": "npx tailwindcss -i public/css/tailwind.css -o public/css/app.css --watch"
+    "css": "npx tailwindcss -i public/css/tailwind.css -o public/css/app.css --watch",
+    "db:import" : "node ./seed/seeder.js -i",
+    "db:delete" : "node ./seed/seeder.js -d"
   },
   "repository": {
     "type": "git",

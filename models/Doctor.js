@@ -31,6 +31,13 @@ const Doctor = db.define('doctors',{
             const salt = await bcrypt.genSalt(10)
             doctor.password= await bcrypt.hash(doctor.password,salt)
         },
+    },
+    scopes:{
+        eliminarPassword:{
+            attributes:{
+                exclude:['password','token','verified']
+            }
+        }
     }
 })
 

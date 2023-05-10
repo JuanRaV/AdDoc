@@ -33,4 +33,4 @@ const PatientSymptom = db.define("patient_symptoms", {
 Patient.belongsToMany(Symptom, { through: PatientSymptom });
 Symptom.belongsToMany(Patient, { through: PatientSymptom });
 
-export default PatientSymptom;
+export { Doctor,Symptom,Patient, PatientSymptom}
